@@ -9,12 +9,21 @@ on:
 jobs:
   keep-alive:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false # 即使其中一个域名失败，其他域名仍继续运行
+      matrix:
+        # 配置多个域名及其对应的 Secret 密钥名称
+        include:
+          - domain: "i.ifanr.dedyn.io"
+            token_secret: "DESEC_TOKEN_IFANR"  # 账号 A 的 Token 在 GitHub Secrets 中的名称
+          - domain: "i.5iclub.dedyn.io"
+            token_secret: "DESEC_TOKEN_5ICLUB" # 账号 B 的 Token 在 GitHub Secrets 中的名称
     steps:
       - name: Touch deSEC Keep-Alive Record
         env:
-          DESEC_TOKEN: ${{ secrets.DESEC_TOKEN }}
-          # 替换为你的域名（如 cdn.dedyn.io 或 i.cdn.dedyn.io）
-          DOMAIN: "i.ifanr.dedyn.io"
+          # 动态读取矩阵中定义的 Secret 名称
+          DESEC_TOKEN: ${{ secrets[matrix.token_secret] }}
+          DOMAIN: ${{ matrix.domain }}
         run: |
           TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
           echo "Updating keep-alive record for $DOMAIN at $TIMESTAMP..."
