@@ -15,7 +15,7 @@ jobs:
         # 配置多个域名及其对应的 Secret 密钥名称
         include:
           - domain: "i.ifanr.dedyn.io"
-            token_secret: "DESEC_TOKEN_IFANR"  # 账号 A 的 Token 在 GitHub Secrets 中的名称
+            token_secret: "DESEC_TOKEN"  # 账号 A 的 Token 在 GitHub Secrets 中的名称
           - domain: "i.5iclub.dedyn.io"
             token_secret: "DESEC_TOKEN_5ICLUB" # 账号 B 的 Token 在 GitHub Secrets 中的名称
     steps:
